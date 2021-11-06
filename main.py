@@ -5,9 +5,9 @@ from osureader.beatmap import Beatmap
 import pygame as pg
 import os, sys
 
+reader = BeatmapParser()
 beatmap = Beatmap(reader.parse("D:/osu/Songs/481786 Levaslater - NNRT/Levaslater - NNRT (ZZHBOY) [CS' Another].osu"))
 notes = list()
-reader = BeatmapParser()
 #objects = beatmap.hit_objects
 #for i in objects:
 #    notes.append(Note().setNote(i))
