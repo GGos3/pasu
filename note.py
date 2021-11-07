@@ -11,7 +11,8 @@ class Note:
 
     def setNote(self, note:SliderObject, position):
         self.starttime = note.time
-        self.endtime = note.time + note.length
+        if note.type == SliderObject:
+            self.endtime = note.time + note.length
         self.duration = 2
         self.key = position
         
