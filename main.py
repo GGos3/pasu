@@ -6,8 +6,8 @@ import pygame as pg
 import os
 import sys
 
-directory = 'D:/osu/Songs/324288 xi - ANiMA/'
-fileName = "xi - ANiMA (Kuo Kyoka) [Kyou's 4K Lv.9].osu"
+directory = 'songs/ANiMA/'
+fileName = "xi - ANiMA [4K Lv.1].osu"
 
 keypositions = maploader.Maploader().load_keyposition(directory+fileName)
 notelist = maploader.Maploader().load_notes(directory+fileName, keypositions)
@@ -18,33 +18,37 @@ k3list = []  # 생성된 노트 리스트
 k4list = []  # 생성된 노트 리스트
 
 gametime = 0  # 게임 플레이 시간
+exposure_time = 0.1 # 판정의 노출 시간
 running = True
-notepng1 = pg.image.load('mania-note1.png')  # 노트 리소스
-notepng2 = pg.image.load('mania-note2.png')  # 노트 리소스
-notepng3 = pg.image.load('mania-note2.png')  # 노트 리소스
-notepng4 = pg.image.load('mania-note1.png')  # 노트 리소스
-stageright = pg.image.load('mania-stage-right.png')  # UI 리소스
-stagehint = pg.image.load('mania-stage-hint.png')  # 판정선 리소스
+notepng1 = pg.image.load('skin/mania-note1.png')  # 노트 리소스
+notepng2 = pg.image.load('skin/mania-note2.png')  # 노트 리소스
+notepng3 = pg.image.load('skin/mania-note2.png')  # 노트 리소스
+notepng4 = pg.image.load('skin/mania-note1.png')  # 노트 리소스
+stageright = pg.image.load('skin/mania-stage-right.png')  # UI 리소스
+stageleft = pg.image.load('skin/mania-stage-left.png')  # UI 리소스
+stagehint = pg.image.load('skin/mania-stage-hint.png')  # 판정선 리소스
+hit300 = pg.image.load('skin/mania-hit300g-0.png')
+hit0 = pg.image.load('skin/mania-hit0.png')
 
 noteobject1 = pg.transform.scale(notepng1, (150, 50))  # 노트 오브젝트 생성
 noteobject2 = pg.transform.scale(notepng2, (150, 50))  # 노트 오브젝트 생성
 noteobject3 = pg.transform.scale(notepng3, (150, 50))  # 노트 오브젝트 생성
 noteobject4 = pg.transform.scale(notepng4, (150, 50))  # 노트 오브젝트 생성
-stageright = pg.transform.scale(stageright, (400, 2300))  # UI 오브젝트 생성
+stageright = pg.transform.scale(stageright, (400, 100))  # UI 오브젝트 생성
 stagehint = pg.transform.scale(stagehint, (600, 100))  # 판정선 생성
 screen = pg.display.set_mode((630, 1000))  # 해상도 설정
 
 pg.display.set_caption("pasu!")  # 타이틀
 pg.init()  # 파이게임 초기화
-sound = pg.mixer.music.load(f"{directory}anima.mp3")  # 음악 리소스 불러오기
+sound = pg.mixer.music.load(f"{directory}audio.mp3")  # 음악 리소스 불러오기
 pg.mixer.pre_init(44100, -16, 2, 0)  # 파이게임 오디오 초기화
 pg.mixer.music.set_volume(0.25)
 clock = pg.time.Clock()
 
 isPlay = False  # 게임 시작 체크
 
-perfectpos = 800
-duration = 1000  # 노트 이동속도 (*이동에 걸리는 시간)
+perfectpos = 800 # 판정 선
+duration = 500  # 노트 이동속도 (*이동에 걸리는 시간)
 pressedkey = [False, False, False, False]  # 키 입력 체크 (추후 사용)
 
 # 메인 루프
@@ -67,7 +71,7 @@ while running:
                 pg.mixer.music.play()
 
         # 키보드 입력 부분
-        elif event.type == pg.KEYDOWN and event.key == pg.K_d:  # 1번 키 (인덱스 0)
+        elif event.type == pg.KEYDOWN and event.key == pg.K_z:  # 1번 키 (인덱스 0)
             pressedkey[0] = True
             if len(k1list) != 0:  # 16.5 ms 내
                 inputtime = gametime - k1list[0].starttime
@@ -87,7 +91,7 @@ while running:
                     print("50 / ", inputtime)
                     k1list.pop(0)
 
-        elif event.type == pg.KEYDOWN and event.key == pg.K_f:  # 2번 키 (인덱스 1)
+        elif event.type == pg.KEYDOWN and event.key == pg.K_x:  # 2번 키 (인덱스 1)
             pressedkey[1] = True
             if len(k2list) != 0:  # 16.5 ms 내
                 inputtime = gametime - k2list[0].starttime
@@ -106,7 +110,7 @@ while running:
                 elif inputtime <= 124.5 and inputtime >= - 124.5:
                     print("50 / ", inputtime)
                     k2list.pop(0)
-        elif event.type == pg.KEYDOWN and event.key == pg.K_j:  # 3번 키 (인덱스 2)
+        elif event.type == pg.KEYDOWN and event.key == pg.K_KP_2:  # 3번 키 (인덱스 2)
             pressedkey[2] = True
             if len(k3list) != 0:  # 16.5 ms 내
                 inputtime = gametime - k3list[0].starttime
@@ -125,7 +129,7 @@ while running:
                 elif inputtime <= 124.5 and inputtime >= - 124.5:
                     print("50 / ", inputtime)
                     k3list.pop(0)
-        elif event.type == pg.KEYDOWN and event.key == pg.K_k:  # 4번 키 (인덱스 3)
+        elif event.type == pg.KEYDOWN and event.key == pg.K_KP_3:  # 4번 키 (인덱스 3)
             pressedkey[3] = True
             if len(k4list) != 0:  # 16.5 ms 내
                 inputtime = gametime - k4list[0].starttime
@@ -146,13 +150,13 @@ while running:
                     k4list.pop(0)
 
         # 키를 눌렀다 뗐을때 (추후 롱노트에 사용)
-        elif event.type == pg.KEYUP and event.key == pg.K_d:  # 1번 키 (인덱스 0)
+        elif event.type == pg.KEYUP and event.key == pg.K_z:  # 1번 키 (인덱스 0)
             pressedkey[0] = False
-        elif event.type == pg.KEYUP and event.key == pg.K_f:  # 2번 키 (인덱스 1)
+        elif event.type == pg.KEYUP and event.key == pg.K_x:  # 2번 키 (인덱스 1)
             pressedkey[1] = False
-        elif event.type == pg.KEYUP and event.key == pg.K_j:  # 3번 키 (인덱스 2)
+        elif event.type == pg.KEYUP and event.key == pg.K_KP_2:  # 3번 키 (인덱스 2)
             pressedkey[2] = False
-        elif event.type == pg.KEYUP and event.key == pg.K_k:  # 4번 키 (인덱스 3)
+        elif event.type == pg.KEYUP and event.key == pg.K_KP_3:  # 4번 키 (인덱스 3)
             pressedkey[3] = False
 
     if not isPlay:  # 플레이중이 아닐 때 임시처리 (추후에 퍼즈 기능으로 사용)
@@ -179,8 +183,11 @@ while running:
         for i in k1list:
             # 노트 미스 처리
             if gametime > i.starttime + 124.5:
-                print("MISS / ", gametime - i.starttime)
-                k1list.remove(i)
+                if exposure_time > 0:
+                    exposure_time - clock.get_time()
+                    screen.blit(hit0, (170, 500))
+                    print("MISS / ", gametime - i.starttime)
+                    k1list.remove(i)
             else:
                 # 시간으로 노트 움직이기 (따로 설명)
                 pos = 0 + perfectpos * \
@@ -189,28 +196,37 @@ while running:
                 screen.blit(obj, (0, pos))
         for i in k2list:
             if gametime > i.starttime + 124.5:
-                print("MISS / ", gametime - i.starttime)
-                k2list.remove(i)
+                if exposure_time > 0:
+                    exposure_time - clock.get_time()
+                    screen.blit(hit0, (170, 500))
+                    print("MISS / ", gametime - i.starttime)
+                    k2list.remove(i)
             else:
                 # 시간으로 노트 움직이기
                 pos = 0 + perfectpos * \
                     ((gametime - i.starttime + duration) / duration)
-                obj = pg.transform.scale(notepng1, (150, 50))
+                obj = pg.transform.scale(notepng2, (150, 50))
                 screen.blit(obj, (150, pos))
         for i in k3list:
             if gametime > i.starttime + 124.5:
-                print("MISS / ", gametime - i.starttime)
-                k3list.remove(i)
+                if exposure_time > 0:
+                    exposure_time - clock.get_time()
+                    screen.blit(hit0, (170, 500))
+                    print("MISS / ", gametime - i.starttime)
+                    k3list.remove(i)
             else:
                 # 시간으로 노트 움직이기
                 pos = 0 + perfectpos * \
                     ((gametime - i.starttime + duration) / duration)
-                obj = pg.transform.scale(notepng1, (150, 50))
+                obj = pg.transform.scale(notepng2, (150, 50))
                 screen.blit(obj, (300, pos))
         for i in k4list:
             if gametime > i.starttime + 124.5:
-                print("MISS / ", gametime - i.starttime)
-                k4list.remove(i)
+                if exposure_time > 0:
+                    exposure_time - clock.get_time()
+                    screen.blit(hit0, (170, 500))
+                    print("MISS / ", gametime - i.starttime)
+                    k4list.remove(i)
             else:
                 # 시간으로 노트 움직이기
                 pos = 0 + perfectpos * \
