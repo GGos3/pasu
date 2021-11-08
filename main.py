@@ -6,8 +6,8 @@ import pygame as pg
 import os
 import sys
 
-directory = 'songs/ANiMA/'
-fileName = "xi - ANiMA [4K Lv.1].osu"
+directory = 'songs/Nhelv/'
+fileName = "Nhelv [4K Lv.5].osu"
 
 keypositions = maploader.Maploader().load_keyposition(directory+fileName)
 notelist = maploader.Maploader().load_notes(directory+fileName, keypositions)
