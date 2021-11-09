@@ -72,15 +72,15 @@ class MetaDetaSettings(ABC):
 
 class DifficultySettings(ABC):
     def __init__(self,
-                h_p_drain_rate: int,
+                h_p_drain_rate: float,
                 circle_size: float,
-                overall_difficulty: int,
+                overall_difficulty: float,
                 approach_rate: float,
                 slider_multiplier: float,
                 slider_tick_rate: int):
-        self.hp_drain_rate = int(h_p_drain_rate)
+        self.hp_drain_rate = float(h_p_drain_rate)
         self.circle_size = float(circle_size)
-        self.overall_difficulty = int(overall_difficulty)
+        self.overall_difficulty = float(overall_difficulty)
         self.approach_rate = float(approach_rate)
         self.slider_multiplier = float(slider_multiplier)
         self.slider_tick_rate = int(slider_tick_rate)

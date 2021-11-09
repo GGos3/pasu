@@ -6,8 +6,8 @@ import pygame as pg
 import os
 import sys
 
-directory = 'songs/Nhelv/'
-fileName = "Nhelv [4K Lv.5].osu"
+directory = 'songs/Gurenge/'
+fileName = "Gurenge [4K Lv.3].osu"
 
 keypositions = maploader.Maploader().load_keyposition(directory+fileName)
 notelist = maploader.Maploader().load_notes(directory+fileName, keypositions)
@@ -18,7 +18,7 @@ k3list = []  # 생성된 노트 리스트
 k4list = []  # 생성된 노트 리스트
 
 gametime = 0  # 게임 플레이 시간
-exposure_time = 0.1 # 판정의 노출 시간
+exposure_time = 0 # 판정의 노출 시간
 running = True
 notepng1 = pg.image.load('skin/mania-note1.png')  # 노트 리소스
 notepng2 = pg.image.load('skin/mania-note2.png')  # 노트 리소스
@@ -27,8 +27,13 @@ notepng4 = pg.image.load('skin/mania-note1.png')  # 노트 리소스
 stageright = pg.image.load('skin/mania-stage-right.png')  # UI 리소스
 stageleft = pg.image.load('skin/mania-stage-left.png')  # UI 리소스
 stagehint = pg.image.load('skin/mania-stage-hint.png')  # 판정선 리소스
-hit300 = pg.image.load('skin/mania-hit300g-0.png')
-hit0 = pg.image.load('skin/mania-hit0.png')
+hit0 = pg.image.load('skin/mania-hit0.png') # hit 0 리소스
+hit50 = pg.image.load('skin/mania-hit50.png') # hit 50 리소스
+hit100 = pg.image.load('skin/mania-hit100.png') # hit 100 리소스
+hit200 = pg.image.load('skin/mania-hit200.png') # hit 200 리소스
+hit300 = pg.image.load('skin/mania-hit300.png') # hit 300 리소스
+hit300g = pg.image.load('skin/mania-hit300g-0.png') # hit 300g 리소스
+
 
 noteobject1 = pg.transform.scale(notepng1, (150, 50))  # 노트 오브젝트 생성
 noteobject2 = pg.transform.scale(notepng2, (150, 50))  # 노트 오브젝트 생성
@@ -180,14 +185,16 @@ while running:
         screen.blit(stageright, (600, 0))  # UI 불러오기
         screen.blit(stagehint, (0, 800))  # 판정선 불러오기
 
+        if exposure_time > 0:
+            exposure_time -= clock.get_time()
+            screen.blit(hit0, (170, 500))
+
         for i in k1list:
             # 노트 미스 처리
             if gametime > i.starttime + 124.5:
-                if exposure_time > 0:
-                    exposure_time - clock.get_time()
-                    screen.blit(hit0, (170, 500))
-                    print("MISS / ", gametime - i.starttime)
-                    k1list.remove(i)
+                print("MISS / ", gametime - i.starttime)
+                exposure_time = 500
+                k1list.remove(i)
             else:
                 # 시간으로 노트 움직이기 (따로 설명)
                 pos = 0 + perfectpos * \
@@ -196,11 +203,9 @@ while running:
                 screen.blit(obj, (0, pos))
         for i in k2list:
             if gametime > i.starttime + 124.5:
-                if exposure_time > 0:
-                    exposure_time - clock.get_time()
-                    screen.blit(hit0, (170, 500))
-                    print("MISS / ", gametime - i.starttime)
-                    k2list.remove(i)
+                print("MISS / ", gametime - i.starttime)
+                exposure_time = 500
+                k2list.remove(i)
             else:
                 # 시간으로 노트 움직이기
                 pos = 0 + perfectpos * \
@@ -209,11 +214,9 @@ while running:
                 screen.blit(obj, (150, pos))
         for i in k3list:
             if gametime > i.starttime + 124.5:
-                if exposure_time > 0:
-                    exposure_time - clock.get_time()
-                    screen.blit(hit0, (170, 500))
-                    print("MISS / ", gametime - i.starttime)
-                    k3list.remove(i)
+                print("MISS / ", gametime - i.starttime)
+                exposure_time = 500
+                k3list.remove(i)
             else:
                 # 시간으로 노트 움직이기
                 pos = 0 + perfectpos * \
@@ -222,11 +225,9 @@ while running:
                 screen.blit(obj, (300, pos))
         for i in k4list:
             if gametime > i.starttime + 124.5:
-                if exposure_time > 0:
-                    exposure_time - clock.get_time()
-                    screen.blit(hit0, (170, 500))
-                    print("MISS / ", gametime - i.starttime)
-                    k4list.remove(i)
+                print("MISS / ", gametime - i.starttime)
+                exposure_time = 500
+                k4list.remove(i)
             else:
                 # 시간으로 노트 움직이기
                 pos = 0 + perfectpos * \
