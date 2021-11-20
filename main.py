@@ -370,11 +370,13 @@ while running:
                 print("MISS / ", gametime - i.starttime)
                 last_hit = hit0
                 exposure_time = 500
+                combo = 0
                 k1list.remove(i)
             elif i.notetype == 0 and gametime > i.starttime + 124.5:
                 print("MISS / ", gametime - i.starttime)
                 last_hit = hit0
                 exposure_time = 500
+                combo = 0
                 k1list.remove(i)
             else:
                 # 시간으로 노트 움직이기 (따로 설명)
@@ -391,11 +393,13 @@ while running:
                 print("MISS / ", gametime - i.starttime)
                 last_hit = hit0
                 exposure_time = 500
+                combo = 0
                 k2list.remove(i)
             elif i.notetype == 0 and gametime > i.starttime + 124.5:
                 print("MISS / ", gametime - i.starttime)
                 last_hit = hit0
                 exposure_time = 500
+                combo = 0
                 k2list.remove(i)
             else:
                 # 시간으로 노트 움직이기 (따로 설명)
@@ -412,11 +416,13 @@ while running:
                 print("MISS / ", gametime - i.starttime)
                 last_hit = hit0
                 exposure_time = 500
+                combo = 0
                 k3list.remove(i)
             elif i.notetype == 0 and gametime > i.starttime + 124.5:
                 print("MISS / ", gametime - i.starttime)
                 last_hit = hit0
                 exposure_time = 500
+                combo = 0
                 k3list.remove(i)
             else:
                 # 시간으로 노트 움직이기 (따로 설명)
@@ -433,11 +439,13 @@ while running:
                 print("MISS / ", gametime - i.starttime)
                 last_hit = hit0
                 exposure_time = 500
+                combo = 0
                 k4list.remove(i)
             elif i.notetype == 0 and gametime > i.starttime + 124.5:
                 print("MISS / ", gametime - i.starttime)
                 last_hit = hit0
                 exposure_time = 500
+                combo = 0
                 k4list.remove(i)
             else:
                 # 시간으로 노트 움직이기 (따로 설명)
