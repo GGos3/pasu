@@ -4,9 +4,8 @@ from osureader.beatmap import Beatmap
 from note import Note
 import maploader
 import pygame as pg
-import os
-import math
-import sys
+import os, math, sys
+
 
 directory = 'songs/Nhelv/'
 fileName = "Nhelv [4K Lv.4].osu"
