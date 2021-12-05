@@ -7,6 +7,7 @@ from tkinter import messagebox
 from note import Note
 import maploader
 <<<<<<< HEAD
+<<<<<<< HEAD
 from enum import Enum
 import os
 import math
@@ -17,8 +18,11 @@ import Gamemanager
 =======
 import pygame as pg
 import os, math, sys
+=======
 import pygame as pg
 import os, math, sys
+
+>>>>>>> b4d9bf6dc515b7640bf9110ef8cac8c55d43494e
 
 >>>>>>> b4d9bf6dc515b7640bf9110ef8cac8c55d43494e
 
