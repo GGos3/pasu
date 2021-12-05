@@ -17,6 +17,8 @@ import Gamemanager
 =======
 import pygame as pg
 import os, math, sys
+import pygame as pg
+import os, math, sys
 
 >>>>>>> b4d9bf6dc515b7640bf9110ef8cac8c55d43494e
 
