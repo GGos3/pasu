@@ -6,8 +6,6 @@ from tkinter import filedialog
 from tkinter import messagebox
 from note import Note
 import maploader
-<<<<<<< HEAD
-<<<<<<< HEAD
 from enum import Enum
 import os
 import math
@@ -15,18 +13,7 @@ import sys
 import Usersetting
 import Notemanager
 import Gamemanager
-=======
-import pygame as pg
-import os, math, sys
-=======
-import pygame as pg
-import os, math, sys
 
->>>>>>> b4d9bf6dc515b7640bf9110ef8cac8c55d43494e
-
->>>>>>> b4d9bf6dc515b7640bf9110ef8cac8c55d43494e
-
-game_icon = pg.image.load('skin/osulogo.png')
 note1 = pg.image.load('skin/mania-note1.png')  # 노트 리소스
 note2 = pg.image.load('skin/mania-note2.png')  # 노트 리소스
 note3 = pg.image.load('skin/mania-note2.png')  # 노트 리소스
@@ -84,7 +71,6 @@ stagehint = pg.transform.scale(stagehint, (600, 100))  # 판정선 생성
 
 screen = pg.display.set_mode((608, 1000))  # 해상도 설정
 pg.display.set_caption("pasu!")  # 타이틀
-pg.display.set_icon(game_icon)  # 아이콘
 pg.init()  # 파이게임 초기화
 
 user_setting = Usersetting.Usersetting()  # Usersetting 객체 생성
@@ -177,15 +163,15 @@ def getAccuracy(hitValues):
     return result
 
 def getRank(accuracy):
-    if accuracy <= 100:
+    if accuracy >= 100:
         return 'SS'
-    if accuracy <= 95:
+    if accuracy >= 95:
         return 'S'
-    if accuracy <= 90:
+    if accuracy >= 90:
         return 'A'
-    if accuracy <= 80:
+    if accuracy >= 80:
         return 'B'
-    if accuracy <= 70:
+    if accuracy >= 70:
         return 'C'
     else:
         return 'D'
@@ -599,7 +585,7 @@ while running:
         if score > 0:
             for i in range(0, len(str(math.floor(score)))):
                 screen.blit(defaults[int(str(math.floor(score))[i])],
-                            (getmiddle_nums_score(i, len(str(math.floor(score)))), 500))
+                            (getmiddle_nums_score(i, len(str(math.floor(score)))), 850))
         if getRank(accuracy) == 'SS':
             screen.blit(rankSS, (getmiddle_img(rankSS), 200))
         elif getRank(accuracy) == 'S':
