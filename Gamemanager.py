@@ -1,5 +1,5 @@
-class manager:
-    gametime = -3
+class Gamemanager:
+    gameTime = -3
     def play(self):
         return True
     def pause(self):

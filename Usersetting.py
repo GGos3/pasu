@@ -8,10 +8,10 @@ class Usersetting:
     user_select = '' # 선택한 비트맵
     user_select_dir = '' # 선택한 비트맵 폴더
 
-    def setskin(args):
+    def setSkin(args):
         print()
     
-    def songselect(self):
+    def songSelect(self):
         root=tkinter.Tk()
         root.overrideredirect(True)
         root.attributes("-alpha", 0)

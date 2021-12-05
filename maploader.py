@@ -1,19 +1,20 @@
 from typing import List
 from osureader.reader import BeatmapParser
 from osureader.beatmap import Beatmap
-from note import Note
+from Note import Note
 
 class Maploader:
-    # 키 위치를 가져오는 함수
-    # 오스에서 제작한 비트맵에는 노트 위치가 맵마다 뒤죽박죽임
-    # 같은 4키인데 모두 다른 경우가 있음
-    # 근데 오스는 이걸 정확하게 분리해 낸다.
-    # 그래서 어떤 라인에 나오는지를 따로 정의해주어야함
     def load_songFileName(self, location):
         reader = BeatmapParser()
         beatmap = Beatmap(reader.parse(location))
         filename = beatmap.general_settings.audio_file_name
         return filename.lstrip()
+
+    # 키 위치를 가져오는 함수
+    # 오스에서 제작한 비트맵에는 노트 위치가 맵마다 뒤죽박죽임
+    # 같은 4키인데 모두 다른 경우가 있음
+    # 근데 오스는 이걸 정확하게 분리해 낸다.
+    # 그래서 어떤 라인에 나오는지를 따로 정의해주어야함
 
     def load_keyposition(self, location):
         reader = BeatmapParser()                    # 비트맵 파싱 모듈 객체 가져오기
@@ -33,7 +34,7 @@ class Maploader:
         objects = beatmap.hit_objects
         for i in objects:
             cache = Note()
-            cache.setNote(i, keypositons.index(i.point.x))
+            cache.set_Note(i, keypositons.index(i.point.x))
             notes.append(cache)
         return notes
 
