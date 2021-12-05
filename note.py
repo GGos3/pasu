@@ -1,12 +1,13 @@
 from osureader.objects import HitObject, HitObjectType, SliderObject
 from osureader.reader import BeatmapParser
 from osureader.beatmap import Beatmap
-import os 
+import os
+
 
 class Note:
-    startTime = 0 #  퍼펙트 시간
-    noteType = 0   #  노트 타입
-    key = 0        #  키 위치
+    startTime = 0  # 퍼펙트 시간
+    noteType = 0  # 노트 타입
+    key = 0  # 키 위치
     islastNote = False
 
     def set_Note(self, note, position):

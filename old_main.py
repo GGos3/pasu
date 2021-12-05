@@ -1,8 +1,8 @@
 from pygame.constants import KEYDOWN
 from osureader.reader import BeatmapParser
 from osureader.beatmap import Beatmap
-from note import Note
-import maploader
+from Note import Note
+import Maploader
 import pygame as pg
 import os
 import math
@@ -11,8 +11,8 @@ import sys
 directory = 'songs/ANiMA/'
 fileName = "xi - ANiMA [4K Lv.4].osu"
 
-keypositions = maploader.Maploader().load_keyposition(directory + fileName)
-notelist = maploader.Maploader().load_notes(directory + fileName, keypositions)
+keypositions = Maploader.Maploader().load_keyposition(directory + fileName)
+notelist = Maploader.Maploader().load_notes(directory + fileName, keypositions)
 
 k1list = []  # 생성된 노트 리스트
 k2list = []  # 생성된 노트 리스트
@@ -82,6 +82,7 @@ pressedkey = [False, False, False, False]  # 키 입력 체크 (추후 사용)
 def getHoldNoteSize(base_height, hold_length, duration):
     return base_height * hold_length / duration
 
+
 def EXscore(MaxScore, TotalNotes, Judgement):
     global Bonus
     Hit = ()
@@ -106,11 +107,14 @@ def EXscore(MaxScore, TotalNotes, Judgement):
     Score = BaseScore + BonusScore
     return Score
 
+
 def getmiddle_nums(target_digit, all_digit):
     return 608 / 2 - (score0.get_width() / 2) * all_digit + target_digit * score0.get_width()
 
+
 def getmiddle_img(img):
     return 608 / 2 - (img.get_width() / 2)
+
 
 # 메인 루프
 while running:
@@ -135,7 +139,7 @@ while running:
         elif event.type == pg.KEYDOWN and event.key == pg.K_r:
             if isPlay:
                 pg.mixer.music.stop()
-                notelist = maploader.Maploader().load_notes(directory + fileName, keypositions)
+                notelist = Maploader.Maploader().load_notes(directory + fileName, keypositions)
                 k1list = []
                 k2list = []
                 k3list = []

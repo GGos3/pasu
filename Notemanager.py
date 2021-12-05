@@ -1,5 +1,6 @@
 import Maploader
 
+
 class Notemanager:
     notePos = None
     notelist = None
@@ -31,6 +32,7 @@ class Notemanager:
                     self.k3list.append(self.notelist.pop(0))
                 elif self.notelist[0].key == 3:
                     self.k4list.append(self.notelist.pop(0))
+
     def check_miss(self, i, gametime):
         # if i.notetype == 1 and gametime > i.endtime + 124.5: # 롱노트 일때
         #     # print("MISS / ", gametime - i.startTime)
@@ -43,7 +45,7 @@ class Notemanager:
         #     elif i.key == 3:
         #         self.k4list.remove(i)
         #     return True
-        if i.noteType == 0 and gametime > i.startTime + 124.5: # 일반노트 일때
+        if i.noteType == 0 and gametime > i.startTime + 124.5:  # 일반노트 일때
             # print("MISS / ", gametime - i.startTime)
             if i.key == 0:
                 self.k1list.remove(i)
@@ -54,5 +56,5 @@ class Notemanager:
             elif i.key == 3:
                 self.k4list.remove(i)
             return True
-        else: 
+        else:
             return False

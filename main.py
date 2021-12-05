@@ -155,6 +155,7 @@ def EX_score(MaxScore, TotalNotes, Judgement):
     Score = BaseScore + BonusScore
     return Score
 
+
 def get_Accuracy(hitValues):
     totalPointsOfHits = hitValues[1]*50 + hitValues[2] * \
         100 + hitValues[3]*200+hitValues[4]*300+hitValues[5]*300
@@ -163,6 +164,7 @@ def get_Accuracy(hitValues):
     result = totalPointsOfHits / (totalNumberofHits * 300)
     result = math.floor(result*10000) / 100
     return result
+
 
 def get_Rank(accuracy):
     if accuracy >= 100:

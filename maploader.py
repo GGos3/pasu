@@ -3,6 +3,7 @@ from osureader.reader import BeatmapParser
 from osureader.beatmap import Beatmap
 from Note import Note
 
+
 class Maploader:
     def load_songFileName(self, location):
         reader = BeatmapParser()
@@ -27,7 +28,7 @@ class Maploader:
         return positions
 
     # 노트 오브젝트를 가져오는 함수
-    def load_notes(self, location, keypositons:List):
+    def load_notes(self, location, keypositons: List):
         reader = BeatmapParser()
         beatmap = Beatmap(reader.parse(location))
         notes = []
@@ -37,4 +38,3 @@ class Maploader:
             cache.set_Note(i, keypositons.index(i.point.x))
             notes.append(cache)
         return notes
-
