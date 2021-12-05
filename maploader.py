@@ -9,6 +9,12 @@ class Maploader:
     # 같은 4키인데 모두 다른 경우가 있음
     # 근데 오스는 이걸 정확하게 분리해 낸다.
     # 그래서 어떤 라인에 나오는지를 따로 정의해주어야함
+    def load_songFileName(self, location):
+        reader = BeatmapParser()
+        beatmap = Beatmap(reader.parse(location))
+        filename = beatmap.general_settings.audio_file_name
+        return filename.lstrip()
+
     def load_keyposition(self, location):
         reader = BeatmapParser()                    # 비트맵 파싱 모듈 객체 가져오기
         beatmap = Beatmap(reader.parse(location))   # location의 파일 가져와서 읽기

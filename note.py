@@ -9,6 +9,7 @@ class Note:
     holdlength = 0
     notetype = 0 #  노트 타입
     key = 0      #  키 위치
+    islastNote = False
 
     def setNote(self, note, position):
         self.starttime = note.time

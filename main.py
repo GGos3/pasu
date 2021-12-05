@@ -1,31 +1,30 @@
+import pygame as pg
 from pygame.constants import KEYDOWN
 from osureader.reader import BeatmapParser
 from osureader.beatmap import Beatmap
+from tkinter import filedialog
+from tkinter import messagebox
 from note import Note
 import maploader
-import pygame as pg
+<<<<<<< HEAD
+from enum import Enum
 import os
 import math
 import sys
+import Usersetting
+import Notemanager
+import Gamemanager
+=======
+import pygame as pg
+import os, math, sys
 
-directory = 'songs/Nhelv/'
-fileName = "Nhelv [4K Lv.4].osu"
+>>>>>>> b4d9bf6dc515b7640bf9110ef8cac8c55d43494e
 
-keypositions = maploader.Maploader().load_keyposition(directory + fileName)
-notelist = maploader.Maploader().load_notes(directory + fileName, keypositions)
-
-k1list = []  # 생성된 노트 리스트
-k2list = []  # 생성된 노트 리스트
-k3list = []  # 생성된 노트 리스트
-k4list = []  # 생성된 노트 리스트
-
-gametime = 0  # 게임 플레이 시간
-exposure_time = 0  # 판정의 노출 시간
-running = True
-notepng1 = pg.image.load('skin/mania-note1.png')  # 노트 리소스
-notepng2 = pg.image.load('skin/mania-note2.png')  # 노트 리소스
-notepng3 = pg.image.load('skin/mania-note2.png')  # 노트 리소스
-notepng4 = pg.image.load('skin/mania-note1.png')  # 노트 리소스
+game_icon = pg.image.load('skin/osulogo.png')
+note1 = pg.image.load('skin/mania-note1.png')  # 노트 리소스
+note2 = pg.image.load('skin/mania-note2.png')  # 노트 리소스
+note3 = pg.image.load('skin/mania-note2.png')  # 노트 리소스
+note4 = pg.image.load('skin/mania-note1.png')  # 노트 리소스
 stageright = pg.image.load('skin/mania-stage-right.png')  # UI 리소스
 stageleft = pg.image.load('skin/mania-stage-left.png')  # UI 리소스
 stagehint = pg.image.load('skin/mania-stage-hint.png')  # 판정선 리소스
@@ -35,6 +34,13 @@ hit100 = pg.image.load('skin/mania-hit100.png')  # hit 100 리소스
 hit200 = pg.image.load('skin/mania-hit200.png')  # hit 200 리소스
 hit300 = pg.image.load('skin/mania-hit300.png')  # hit 300 리소스
 hit300g = pg.image.load('skin/mania-hit300g-0.png')  # hit 300g 리소스
+
+rankSS = score0 = pg.image.load('skin/ranking-X.png')
+rankS = score0 = pg.image.load('skin/ranking-S.png')
+rankA = score0 = pg.image.load('skin/ranking-A.png')
+rankB = score0 = pg.image.load('skin/ranking-B.png')
+rankC = score0 = pg.image.load('skin/ranking-C.png')
+rankD = score0 = pg.image.load('skin/ranking-D.png')
 
 score0 = pg.image.load('skin/score0.png')  # 숫자 이미지
 score1 = pg.image.load('skin/score1.png')  # 숫자 이미지
@@ -46,39 +52,90 @@ score6 = pg.image.load('skin/score6.png')  # 숫자 이미지
 score7 = pg.image.load('skin/score7.png')  # 숫자 이미지
 score8 = pg.image.load('skin/score8.png')  # 숫자 이미지
 score9 = pg.image.load('skin/score9.png')  # 숫자 이미지
-scores = [score0, score1, score2, score3, score4, score5, score6, score7, score8, score9] 
+scores = [score0, score1, score2, score3, score4,
+          score5, score6, score7, score8, score9]
 
-noteobject1 = pg.transform.scale(notepng1, (150, 50))  # 노트 오브젝트 생성
-noteobject2 = pg.transform.scale(notepng2, (150, 50))  # 노트 오브젝트 생성
-noteobject3 = pg.transform.scale(notepng3, (150, 50))  # 노트 오브젝트 생성
-noteobject4 = pg.transform.scale(notepng4, (150, 50))  # 노트 오브젝트 생성
+default0 = pg.image.load('skin/default-0.png')
+default1 = pg.image.load('skin/default-1.png')
+default2 = pg.image.load('skin/default-2.png')
+default3 = pg.image.load('skin/default-3.png')
+default4 = pg.image.load('skin/default-4.png')
+default5 = pg.image.load('skin/default-5.png')
+default6 = pg.image.load('skin/default-6.png')
+default7 = pg.image.load('skin/default-7.png')
+default8 = pg.image.load('skin/default-8.png')
+default9 = pg.image.load('skin/default-9.png')
+defaults = [default0, default1, default2, default3, default4,
+            default5, default6, default7, default8, default9]
+
+noteobject1 = pg.transform.scale(note1, (150, 50))  # 노트 오브젝트 생성
+noteobject2 = pg.transform.scale(note2, (150, 50))  # 노트 오브젝트 생성
+noteobject3 = pg.transform.scale(note3, (150, 50))  # 노트 오브젝트 생성
+noteobject4 = pg.transform.scale(note4, (150, 50))  # 노트 오브젝트 생성
 stageright = pg.transform.scale(stageright, (8, 1000))  # UI 오브젝트 생성
 stageleft = pg.transform.scale(stageleft, (8, 1000))  # UI 오브젝트 생성
 stagehint = pg.transform.scale(stagehint, (600, 100))  # 판정선 생성
 
 screen = pg.display.set_mode((608, 1000))  # 해상도 설정
 pg.display.set_caption("pasu!")  # 타이틀
+pg.display.set_icon(game_icon)  # 아이콘
 pg.init()  # 파이게임 초기화
-sound = pg.mixer.music.load(f"{directory}audio.mp3")  # 음악 리소스 불러오기
+
+user_setting = Usersetting.Usersetting()  # Usersetting 객체 생성
+user_setting.songselect()   # 맵 선택
+noteManager = Notemanager.Notemanager()
+noteManager.Setup(user_setting.user_select)
+gameManager = Gamemanager.manager()
+
+beatmapSongFileName = maploader.Maploader().load_songFileName(
+    user_setting.user_select)  # 음악 파일 이름 가져오기
+beatmapDir = user_setting.user_select_dir  # 비트맵 폴더
+
+sound = pg.mixer.music.load(beatmapDir+'/'+beatmapSongFileName)  # 음악 리소스 불러오기
+
 pg.mixer.pre_init(44100, -16, 2, 0)  # 파이게임 오디오 초기화
 pg.mixer.music.set_volume(0.25)
 clock = pg.time.Clock()
 
-isPlay = False  # 게임 시작 체크
+isPlay = False
+running = True
+isPause = False
+frameRate = 1000
+isEnded = False
+endDelayTime = 3000
 
-restarted = False
-TotalNotes = len(notelist)
+# 인게임 시스템 변수
+TotalNotes = len(noteManager.notelist)
 score = 0  # 게임 점수
 MaxScore = 1000000  # 최대 점수
-last_hit = hit0  # 현재 판정
 Bonus = 100
-combo = 0
 perfectpos = 800  # 판정 선
-duration = 400  # 노트 이동속도 (*이동에 걸리는 시간)
+last_accuracy = hit0
+last_accuracy_exposure_time = 0  # 마지막 판정의 노출 시간
+combo = 0
+hitValues = [0, 0, 0, 0, 0, 0]  # MISS,50,100,200,300,MAX
+
 pressedkey = [False, False, False, False]  # 키 입력 체크 (추후 사용)
+
+# 화면 변수
+
+
+class Screen(Enum):
+    MainMenu = 0
+    GamePlay = 1
+    ResultScreen = 2
+
+
+now_screen = Screen(1)
+
+# 롱노트 오브젝트 길이
+
 
 def getHoldNoteSize(base_height, hold_length, duration):
     return base_height * hold_length / duration
+
+# 점수계산
+
 
 def EXscore(MaxScore, TotalNotes, Judgement):
     global Bonus
@@ -104,360 +161,456 @@ def EXscore(MaxScore, TotalNotes, Judgement):
     Score = BaseScore + BonusScore
     return Score
 
+def getAccuracy(hitValues):
+    totalPointsOfHits = hitValues[1]*50 + hitValues[2] * \
+        100 + hitValues[3]*200+hitValues[4]*300+hitValues[5]*300
+    totalNumberofHits = hitValues[0]+hitValues[1] + \
+        hitValues[2]+hitValues[3]+hitValues[4]+hitValues[5]
+    result = totalPointsOfHits / (totalNumberofHits * 300)
+    result = math.floor(result*10000) / 100
+    return result
+
+def getRank(accuracy):
+    if accuracy <= 100:
+        return 'SS'
+    if accuracy <= 95:
+        return 'S'
+    if accuracy <= 90:
+        return 'A'
+    if accuracy <= 80:
+        return 'B'
+    if accuracy <= 70:
+        return 'C'
+    else:
+        return 'D'
+
+# 위치계산 함수들
+# 콤보 띄우는 이미지
+
+
 def getmiddle_nums(target_digit, all_digit):
-    return 608 /2 - (score0.get_width() / 2) * all_digit + target_digit * score0.get_width()
+    global score0  # 대표적인 숫자 콤보 이미지 변수
+    return 608 / 2 - (score0.get_width() / 2) * all_digit + target_digit * score0.get_width()
+# 스코어 띄우는 이미지
+
+
+def getmiddle_nums_score(target_digit, all_digit):
+    global default0  # 대표적인 숫자 스코어 이미지 변수
+    return 608 / 2 - (default0.get_width() / 2) * all_digit + target_digit * default0.get_width()
+
 
 def getmiddle_img(img):
-    return 608 / 2 - (img.get_width() / 2) 
+    return 608 / 2 - (img.get_width() / 2)
 
-# 메인 루프
+
+def NoteRender(i):
+    global gameManager, perfectpos, user_setting, note1
+    gametime = gameManager.gametime
+    duration = user_setting.duration
+
+    if i.key == 0:
+        pos = 0 + perfectpos * ((gametime - i.starttime + duration) / duration)
+        # if i.notetype == 1:  # 롱노트이면
+        #     long_obj = pg.transform.scale(
+        #         note1, (150, getHoldNoteSize(50, i.holdlength, duration)))
+        #     screen.blit(long_obj, (0, pos - 50 - long_obj.get_width()))
+        obj = pg.transform.scale(note1, (150, 50))
+        screen.blit(obj, (0, pos))
+    elif i.key == 1:
+        pos = 0 + perfectpos * ((gametime - i.starttime + duration) / duration)
+        # if i.notetype == 1:  # 롱노트이면
+        #     long_obj = pg.transform.scale(
+        #         note2, (150, getHoldNoteSize(50, i.holdlength, duration)))
+        #     screen.blit(long_obj, (150, pos - 50 - long_obj.get_width()))
+        obj = pg.transform.scale(note2, (150, 50))
+        screen.blit(obj, (150, pos))
+    elif i.key == 2:
+        pos = 0 + perfectpos * ((gametime - i.starttime + duration) / duration)
+        # if i.notetype == 1:  # 롱노트이면
+        #     long_obj = pg.transform.scale(
+        #         note3, (150, getHoldNoteSize(50, i.holdlength, duration)))
+        #     screen.blit(long_obj, (300, pos - 50 - long_obj.get_width()))
+        obj = pg.transform.scale(note3, (150, 50))
+        screen.blit(obj, (300, pos))
+    elif i.key == 3:
+        pos = 0 + perfectpos * ((gametime - i.starttime + duration) / duration)
+        # if i.notetype == 1:  # 롱노트이면
+        #     long_obj = pg.transform.scale(
+        #         note4, (150, getHoldNoteSize(50, i.holdlength, duration)))
+        #     screen.blit(long_obj, (450, pos - 50 - long_obj.get_width()))
+        obj = pg.transform.scale(note4, (150, 50))
+        screen.blit(obj, (450, pos))
+
+
+def Update():
+    global gameManager, noteManager, last_accuracy, last_accuracy_exposure_time, combo, isPlay
+
+    if isPlay:
+        gameManager.gametime += clock.get_time()  # 0부터 지금까지의 시간을 저장
+        noteManager.SpawnNote(gameManager.gametime, user_setting.duration)
+        for i in noteManager.k1list:
+            if noteManager.CheckMiss(i, gameManager.gametime) == True:
+                last_accuracy = hit0
+                last_accuracy_exposure_time = 500
+                combo = 0
+                hitValues[0] += 1
+                if i.islastNote:
+                    isEnded = True
+            else:
+                NoteRender(i)
+        for i in noteManager.k2list:
+            if noteManager.CheckMiss(i, gameManager.gametime) == True:
+                last_accuracy = hit0
+                last_accuracy_exposure_time = 500
+                combo = 0
+                hitValues[0] += 1
+                if i.islastNote:
+                    isEnded = True
+            else:
+                NoteRender(i)
+        for i in noteManager.k3list:
+            if noteManager.CheckMiss(i, gameManager.gametime) == True:
+                last_accuracy = hit0
+                last_accuracy_exposure_time = 500
+                combo = 0
+                hitValues[0] += 1
+                if i.islastNote:
+                    isEnded = True
+            else:
+                NoteRender(i)
+        for i in noteManager.k4list:
+            if noteManager.CheckMiss(i, gameManager.gametime) == True:
+                last_accuracy = hit0
+                last_accuracy_exposure_time = 500
+                combo = 0
+                hitValues[0] += 1
+                if i.islastNote:
+                    isEnded = True
+            else:
+                NoteRender(i)
+
+
 while running:
-    clock.tick(1000)  # 프레임 제한
-    if restarted == True:
-        restarted = False
-        pg.mixer.music.play()
+    clock.tick(frameRate)  # 프레임 제한
+    gametime = gameManager.gametime
+
     for event in pg.event.get():  # 파이게임 이벤트
         if event.type == pg.QUIT:
             running = False
         elif event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
             running = False
-        elif event.type == pg.KEYDOWN and event.key == pg.K_PAGEUP:
-            if duration - 100 > 0:
-                duration -= 100
-        elif event.type == pg.KEYDOWN and event.key == pg.K_PAGEDOWN:
-            duration += 100
-        elif event.type == pg.MOUSEBUTTONDOWN:
-            if not isPlay:
-                isPlay = True
-                pg.mixer.music.play()
+        elif event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
+            if isPlay == False:
+                isPlay = gameManager.play()
+                if isPause:
+                    isPause = False
+                    pg.mixer.music.unpause()
+                else:
+                    pg.mixer.music.play()
+            else:
+                pg.mixer.music.pause()
+                isPlay = gameManager.pause()
+                isPause = True
         elif event.type == pg.KEYDOWN and event.key == pg.K_r:
             if isPlay:
                 pg.mixer.music.stop()
-                notelist = maploader.Maploader().load_notes(directory + fileName, keypositions)
-                k1list = []
-                k2list = []
-                k3list = []
-                k4list = []
-                gametime = 0
+                noteManager.Setup(user_setting.user_select)
+                gameManager.restart()
                 exposure_time = 0
                 score = 0
                 Bonus = 100
                 combo = 0
                 pressedkey = [False, False, False, False]
-                restarted = True
+                isPause = False
+                isPlay = gameManager.play()
+                pg.mixer.music.play()
+                continue
+        elif event.type == pg.KEYDOWN and event.key == pg.K_PAGEUP:
+            if user_setting.duration - 100 > 0:
+                user_setting.duration -= 100
+        elif event.type == pg.KEYDOWN and event.key == pg.K_PAGEDOWN:
+            user_setting.duration += 100
 
-        # 키보드 입력 부분
         elif event.type == pg.KEYDOWN and event.key == pg.K_z:  # 1번 키 (인덱스 0)
             pressedkey[0] = True
-            if len(k1list) != 0:  # 16.5 ms 내
-                inputtime = gametime - k1list[0].starttime
+            if len(noteManager.k1list) != 0:  # 16.5 ms 내
+                inputtime = gametime - noteManager.k1list[0].starttime
                 if inputtime <= 16.5 and inputtime >= - 16.5:
                     print("MAX / ", inputtime)
-                    last_hit = hit300g
+                    last_accuracy = hit300g
                     exposure_time = 500
                     score += (EXscore(MaxScore, TotalNotes, "MAX"))
                     combo += 1
-                    k1list.pop(0)
+                    hitValues[5] += 1
+                    if noteManager.k1list[0].islastNote:
+                        isEnded = True
+                    noteManager.k1list.pop(0)
                 elif inputtime <= 37.5 and inputtime >= - 37.5:
                     print("300 / ", inputtime)
-                    last_hit = hit300
+                    last_accuracy = hit300
                     exposure_time = 500
                     score += (EXscore(MaxScore, TotalNotes, "300"))
                     combo += 1
-                    k1list.pop(0)
+                    hitValues[4] += 1
+                    if noteManager.k1list[0].islastNote:
+                        isEnded = True
+                    noteManager.k1list.pop(0)
                 elif inputtime <= 70.5 and inputtime >= - 70.5:
                     print("200 / ", inputtime)
-                    last_hit = hit200
+                    last_accuracy = hit200
                     exposure_time = 500
                     score += (EXscore(MaxScore, TotalNotes, "200"))
                     combo += 1
-                    k1list.pop(0)
+                    hitValues[3] += 1
+                    if noteManager.k1list[0].islastNote:
+                        isEnded = True
+                    noteManager.k1list.pop(0)
                 elif inputtime <= 100.5 and inputtime >= - 100.5:
                     print("100 / ", inputtime)
-                    last_hit = hit100
+                    last_accuracy = hit100
                     exposure_time = 500
                     score += (EXscore(MaxScore, TotalNotes, "100"))
                     combo += 1
-                    k1list.pop(0)
+                    hitValues[2] += 1
+                    if noteManager.k1list[0].islastNote:
+                        isEnded = True
+                    noteManager.k1list.pop(0)
                 elif inputtime <= 124.5 and inputtime >= - 124.5:
                     print("50 / ", inputtime)
-                    last_hit = hit50
+                    last_accuracy = hit50
                     exposure_time = 500
                     score += (EXscore(MaxScore, TotalNotes, "50"))
                     combo += 1
-                    k1list.pop(0)
-            print(score)
-            print(combo)
+                    hitValues[1] += 1
+                    if noteManager.k1list[0].islastNote:
+                        isEnded = True
+                    noteManager.k1list.pop(0)
         elif event.type == pg.KEYDOWN and event.key == pg.K_x:  # 2번 키 (인덱스 1)
             pressedkey[1] = True
-            if len(k2list) != 0:  # 16.5 ms 내
-                inputtime = gametime - k2list[0].starttime
+            if len(noteManager.k2list) != 0:  # 16.5 ms 내
+                inputtime = gametime - noteManager.k2list[0].starttime
                 if inputtime <= 16.5 and inputtime >= - 16.5:
                     print("MAX / ", inputtime)
-                    last_hit = hit300g
-                    exposure_time = 500
+                    last_accuracy = hit300g
+                    last_accuracy_exposure_time = 500
                     score += EXscore(MaxScore, TotalNotes, "MAX")
                     combo += 1
-                    k2list.pop(0)
+                    hitValues[5] += 1
+                    if noteManager.k2list[0].islastNote:
+                        isEnded = True
+                    noteManager.k2list.pop(0)
                 elif inputtime <= 37.5 and inputtime >= - 37.5:
                     print("300 / ", inputtime)
-                    last_hit = hit300
-                    exposure_time = 500
+                    last_accuracy = hit300
+                    last_accuracy_exposure_time = 500
                     score += (EXscore(MaxScore, TotalNotes, "300"))
                     combo += 1
-                    k2list.pop(0)
+                    hitValues[4] += 1
+                    if noteManager.k2list[0].islastNote:
+                        isEnded = True
+                    noteManager.k2list.pop(0)
                 elif inputtime <= 70.5 and inputtime >= - 70.5:
                     print("200 / ", inputtime)
-                    last_hit = hit200
-                    exposure_time = 500
+                    last_accuracy = hit200
+                    last_accuracy_exposure_time = 500
                     score += (EXscore(MaxScore, TotalNotes, "200"))
                     combo += 1
-                    k2list.pop(0)
+                    hitValues[3] += 1
+                    if noteManager.k2list[0].islastNote:
+                        isEnded = True
+                    noteManager.k2list.pop(0)
                 elif inputtime <= 100.5 and inputtime >= - 100.5:
                     print("100 / ", inputtime)
-                    last_hit = hit100
-                    exposure_time = 500
+                    last_accuracy = hit100
+                    last_accuracy_exposure_time = 500
                     score += (EXscore(MaxScore, TotalNotes, "100"))
                     combo += 1
-                    k2list.pop(0)
+                    hitValues[2] += 1
+                    if noteManager.k2list[0].islastNote:
+                        isEnded = True
+                    noteManager.k2list.pop(0)
                 elif inputtime <= 124.5 and inputtime >= - 124.5:
                     print("50 / ", inputtime)
-                    last_hit = hit50
-                    exposure_time = 500
+                    last_accuracy = hit50
+                    last_accuracy_exposure_time = 500
                     score += (EXscore(MaxScore, TotalNotes, "50"))
                     combo += 1
-                    k2list.pop(0)
-            print(score)
-            print(combo)
+                    hitValues[1] += 1
+                    if noteManager.k2list[0].islastNote:
+                        isEnded = True
+                    noteManager.k2list.pop(0)
         # 3번 키 (인덱스 2)
         elif event.type == pg.KEYDOWN and event.key == pg.K_KP_2:
             pressedkey[2] = True
-            if len(k3list) != 0:  # 16.5 ms 내
-                inputtime = gametime - k3list[0].starttime
+            if len(noteManager.k3list) != 0:  # 16.5 ms 내
+                inputtime = gametime - noteManager.k3list[0].starttime
                 if inputtime <= 16.5 and inputtime >= - 16.5:
                     print("MAX / ", inputtime)
-                    last_hit = hit300g
-                    exposure_time = 500
+                    last_accuracy = hit300g
+                    last_accuracy_exposure_time = 500
                     score += (EXscore(MaxScore, TotalNotes, "MAX"))
                     combo += 1
-                    k3list.pop(0)
+                    hitValues[5] += 1
+                    if noteManager.k3list[0].islastNote:
+                        isEnded = True
+                    noteManager.k3list.pop(0)
                 elif inputtime <= 37.5 and inputtime >= - 37.5:
                     print("300 / ", inputtime)
-                    last_hit = hit300
-                    exposure_time = 500
+                    last_accuracy = hit300
+                    last_accuracy_exposure_time = 500
                     score += (EXscore(MaxScore, TotalNotes, "300"))
                     combo += 1
-                    k3list.pop(0)
+                    hitValues[4] += 1
+                    noteManager.k3list.pop(0)
                 elif inputtime <= 70.5 and inputtime >= - 70.5:
                     print("200 / ", inputtime)
-                    last_hit = hit200
-                    exposure_time = 500
+                    last_accuracy = hit200
+                    last_accuracy_exposure_time = 500
                     score += (EXscore(MaxScore, TotalNotes, "200"))
                     combo += 1
-                    k3list.pop(0)
+                    hitValues[3] += 1
+                    if noteManager.k3list[0].islastNote:
+                        isEnded = True
+                    noteManager.k3list.pop(0)
                 elif inputtime <= 100.5 and inputtime >= - 100.5:
                     print("100 / ", inputtime)
-                    last_hit = hit100
-                    exposure_time = 500
+                    last_accuracy = hit100
+                    last_accuracy_exposure_time = 500
                     score += (EXscore(MaxScore, TotalNotes, "100"))
                     combo += 1
-                    k3list.pop(0)
+                    hitValues[2] += 1
+                    if noteManager.k3list[0].islastNote:
+                        isEnded = True
+                    noteManager.k3list.pop(0)
                 elif inputtime <= 124.5 and inputtime >= - 124.5:
                     print("50 / ", inputtime)
-                    last_hit = hit50
-                    exposure_time = 500
+                    last_accuracy = hit50
+                    last_accuracy_exposure_time = 500
                     score += (EXscore(MaxScore, TotalNotes, "50"))
                     combo += 1
-                    k3list.pop(0)
-            print(score)
-            print(combo)
+                    hitValues[1] += 1
+                    if noteManager.k3list[0].islastNote:
+                        isEnded = True
+                    noteManager.k3list.pop(0)
         # 4번 키 (인덱스 3)
         elif event.type == pg.KEYDOWN and event.key == pg.K_KP_3:
             pressedkey[3] = True
-            if len(k4list) != 0:  # 16.5 ms 내
-                inputtime = gametime - k4list[0].starttime
+            if len(noteManager.k4list) != 0:  # 16.5 ms 내
+                inputtime = gametime - noteManager.k4list[0].starttime
                 if inputtime <= 16.5 and inputtime >= - 16.5:
                     print("MAX / ", inputtime)
-                    last_hit = hit300g
-                    exposure_time = 500
+                    last_accuracy = hit300g
+                    last_accuracy_exposure_time = 500
                     score += (EXscore(MaxScore, TotalNotes, "MAX"))
                     combo += 1
-                    k4list.pop(0)
+                    hitValues[5] += 1
+                    if noteManager.k4list[0].islastNote:
+                        isEnded = True
+                    noteManager.k4list.pop(0)
                 elif inputtime <= 37.5 and inputtime >= - 37.5:
                     print("300 / ", inputtime)
-                    last_hit = hit300
-                    exposure_time = 500
+                    last_accuracy = hit300
+                    last_accuracy_exposure_time = 500
                     score += (EXscore(MaxScore, TotalNotes, "300"))
                     combo += 1
-                    k4list.pop(0)
+                    hitValues[4] += 1
+                    if noteManager.k4list[0].islastNote:
+                        isEnded = True
+                    noteManager.k4list.pop(0)
                 elif inputtime <= 70.5 and inputtime >= - 70.5:
                     print("200 / ", inputtime)
-                    last_hit = hit200
-                    exposure_time = 500
+                    last_accuracy = hit200
+                    last_accuracy_exposure_time = 500
                     score += (EXscore(MaxScore, TotalNotes, "200"))
                     combo += 1
-                    k4list.pop(0)
+                    hitValues[3] += 1
+                    if noteManager.k4list[0].islastNote:
+                        isEnded = True
+                    noteManager.k4list.pop(0)
                 elif inputtime <= 100.5 and inputtime >= - 100.5:
                     print("100 / ", inputtime)
-                    last_hit = hit100
-                    exposure_time = 500
+                    last_accuracy = hit100
+                    last_accuracy_exposure_time = 500
                     score += (EXscore(MaxScore, TotalNotes, "100"))
                     combo += 1
-                    k4list.pop(0)
+                    hitValues[2] += 1
+                    if noteManager.k4list[0].islastNote:
+                        isEnded = True
+                    noteManager.k4list.pop(0)
                 elif inputtime <= 124.5 and inputtime >= - 124.5:
                     print("50 / ", inputtime)
-                    last_hit = hit50
-                    exposure_time = 500
+                    last_accuracy = hit50
+                    last_accuracy_exposure_time = 500
                     score += (EXscore(MaxScore, TotalNotes, "50"))
                     combo += 1
-                    k4list.pop(0)
-            print(score)
-            print(combo)
-        # 키를 눌렀다 뗐을때 (추후 롱노트에 사용)
-        elif event.type == pg.KEYUP and event.key == pg.K_z:  # 1번 키 (인덱스 0)
-            pressedkey[0] = False
-        elif event.type == pg.KEYUP and event.key == pg.K_x:  # 2번 키 (인덱스 1)
-            pressedkey[1] = False
-        elif event.type == pg.KEYUP and event.key == pg.K_KP_2:  # 3번 키 (인덱스 2)
-            pressedkey[2] = False
-        elif event.type == pg.KEYUP and event.key == pg.K_KP_3:  # 4번 키 (인덱스 3)
-            pressedkey[3] = False
-
-    if not isPlay:  # 플레이중이 아닐 때 임시처리 (추후에 퍼즈 기능으로 사용)
-        a = 0  # 의미 없음
-    else:
-        gametime += clock.get_time()  # 0부터 지금까지의 시간을 저장
-
-        # gametime 이 [생성전 대기중인 노트리스트] 0번의 스폰시간을 넘었으면
-        if len(notelist) != 0:
-            if gametime >= notelist[0].starttime - duration:
-                if notelist[0].key == 0:
-                    k1list.append(notelist.pop(0))  # 해당하는 키 리스트에 넣는다
-                elif notelist[0].key == 1:
-                    k2list.append(notelist.pop(0))
-                elif notelist[0].key == 2:
-                    k3list.append(notelist.pop(0))
-                elif notelist[0].key == 3:
-                    k4list.append(notelist.pop(0))
-
+                    hitValues[1] += 1
+                    if noteManager.k4list[0].islastNote:
+                        isEnded = True
+                    noteManager.k4list.pop(0)
+    if now_screen == Screen(0):  # 메인메뉴일때
+        print('현재 메인메뉴 입니다.')
+    elif now_screen == Screen(1):  # 인게임화면일때
         screen.fill((0, 0, 0))  # 화면 검은색으로 채우기
         screen.blit(stagehint, (4, 800))  # 판정선 불러오기
         screen.blit(stageright, (600, 0))  # UI 불러오기
         screen.blit(stageleft, (0, 0))  # UI 불러오기
 
-        if exposure_time > 0:
-            exposure_time -= clock.get_time()
-            if last_hit == hit300g:
-                screen.blit(last_hit, (getmiddle_img(last_hit), 500))
-            if last_hit == hit300:
-                screen.blit(last_hit, (getmiddle_img(last_hit), 500))
-            if last_hit == hit200:
-                screen.blit(last_hit, (getmiddle_img(last_hit), 500))
-            if last_hit == hit100:
-                screen.blit(last_hit, (getmiddle_img(last_hit), 500))
-            if last_hit == hit50:
-                screen.blit(last_hit, (getmiddle_img(last_hit), 500))
-            if last_hit == hit0:
-                screen.blit(last_hit, (getmiddle_img(last_hit), 500))
-        # 스코어의 위치 표시 
-        if combo > 0:
-            for i in range(0, len(str(combo))):
-                screen.blit(scores[int(str(combo)[i])], (getmiddle_nums(i, len(str(combo))), 200))
+        Update()  # 업데이트 함수
 
-        for i in k1list:
-            # 노트 미스 처리
-            if i.notetype == 1 and gametime > i.endtime + 124.5:
-                print("MISS / ", gametime - i.starttime)
-                last_hit = hit0
-                exposure_time = 500
-                combo = 0
-                k1list.remove(i)
-            elif i.notetype == 0 and gametime > i.starttime + 124.5:
-                print("MISS / ", gametime - i.starttime)
-                last_hit = hit0
-                exposure_time = 500
-                combo = 0
-                k1list.remove(i)
+        if isEnded:
+            if endDelayTime > 0:
+                endDelayTime -= clock.get_time()
             else:
-                # 시간으로 노트 움직이기 (따로 설명)
-                pos = 0 + perfectpos * \
-                    ((gametime - i.starttime + duration) / duration)
-                obj = pg.transform.scale(notepng1, (150, 50))
-                screen.blit(obj, (0, pos))
+                now_screen = Screen(2)
+                pg.mixer.music.fadeout(3000)
+                print("결과창 구현")
 
-                if i.notetype == 1: # 롱노트이면
-                    long_obj = pg.transform.scale(notepng1, (150, getHoldNoteSize(50, i.holdlength, duration)))
-                    screen.blit(long_obj, (0, pos - 50 - long_obj.get_width()))
-        for i in k2list:
-            if i.notetype == 1 and gametime > i.endtime + 124.5:
-                print("MISS / ", gametime - i.starttime)
-                last_hit = hit0
-                exposure_time = 500
-                combo = 0
-                k2list.remove(i)
-            elif i.notetype == 0 and gametime > i.starttime + 124.5:
-                print("MISS / ", gametime - i.starttime)
-                last_hit = hit0
-                exposure_time = 500
-                combo = 0
-                k2list.remove(i)
-            else:
-                # 시간으로 노트 움직이기 (따로 설명)
-                pos = 0 + perfectpos * \
-                    ((gametime - i.starttime + duration) / duration)
-                obj = pg.transform.scale(notepng2, (150, 50))
-                screen.blit(obj, (150, pos))
+        # 현재 콤보 표시
+        if combo > 0:  # 콤보가 0보다 클때
+            for i in range(0, len(str(combo))):  # 현재 콤보를 문자열로 변환 후 문자의 개수를 가져옴 -> for 반복문
+                screen.blit(scores[int(str(combo)[i])],
+                            (getmiddle_nums(i, len(str(combo))), 200))
+                # 숫자 이미지를 리스트로 담은 scores에서 이미지를 가져옴
+                # 현재콤보를 문자열로 만들어서 문자의 개수를 구한 뒤, 함수 사용 (i는 몇 번째에 있는 문자인가)
 
-                if i.notetype == 1: # 롱노트이면
-                    long_obj = pg.transform.scale(notepng1, (150, getHoldNoteSize(50, i.holdlength, duration)))
-                    screen.blit(long_obj, (0, pos - 50 - long_obj.get_width()))
-        for i in k3list:
-            if i.notetype == 1 and gametime > i.endtime + 124.5:
-                print("MISS / ", gametime - i.starttime)
-                last_hit = hit0
-                exposure_time = 500
-                combo = 0
-                k3list.remove(i)
-            elif i.notetype == 0 and gametime > i.starttime + 124.5:
-                print("MISS / ", gametime - i.starttime)
-                last_hit = hit0
-                exposure_time = 500
-                combo = 0
-                k3list.remove(i)
-            else:
-                # 시간으로 노트 움직이기 (따로 설명)
-                pos = 0 + perfectpos * \
-                    ((gametime - i.starttime + duration) / duration)
-                obj = pg.transform.scale(notepng2, (150, 50))
-                screen.blit(obj, (300, pos))
-
-                if i.notetype == 1: # 롱노트이면
-                    long_obj = pg.transform.scale(notepng1, (150, getHoldNoteSize(50, i.holdlength, duration)))
-                    screen.blit(long_obj, (0, pos - 50 - long_obj.get_width()))
-        for i in k4list:
-            if i.notetype == 1 and gametime > i.endtime + 124.5:
-                print("MISS / ", gametime - i.starttime)
-                last_hit = hit0
-                exposure_time = 500
-                combo = 0
-                k4list.remove(i)
-            elif i.notetype == 0 and gametime > i.starttime + 124.5:
-                print("MISS / ", gametime - i.starttime)
-                last_hit = hit0
-                exposure_time = 500
-                combo = 0
-                k4list.remove(i)
-            else:
-                # 시간으로 노트 움직이기 (따로 설명)
-                pos = 0 + perfectpos * \
-                    ((gametime - i.starttime + duration) / duration)
-                obj = pg.transform.scale(notepng1, (150, 50))
-                screen.blit(obj, (450, pos))
-
-                if i.notetype == 1: # 롱노트이면
-                    long_obj = pg.transform.scale(notepng1, (150, getHoldNoteSize(50, i.holdlength, duration)))
-                    screen.blit(long_obj, (0, pos - 50 - long_obj.get_width()))
-        pg.display.update()
+        if last_accuracy_exposure_time > 0:
+            last_accuracy_exposure_time -= clock.get_time()
+            if last_accuracy == hit300g:
+                screen.blit(last_accuracy, (getmiddle_img(last_accuracy), 500))
+            if last_accuracy == hit300:
+                screen.blit(last_accuracy, (getmiddle_img(last_accuracy), 500))
+            if last_accuracy == hit200:
+                screen.blit(last_accuracy, (getmiddle_img(last_accuracy), 500))
+            if last_accuracy == hit100:
+                screen.blit(last_accuracy, (getmiddle_img(last_accuracy), 500))
+            if last_accuracy == hit50:
+                screen.blit(last_accuracy, (getmiddle_img(last_accuracy), 500))
+            if last_accuracy == hit0:
+                screen.blit(last_accuracy, (getmiddle_img(last_accuracy), 500))
+    elif now_screen == Screen(2):  # 결과창일때
+        screen.fill((0, 0, 0))
+        accuracy = getAccuracy(hitValues)
+        if score > 0:
+            for i in range(0, len(str(math.floor(score)))):
+                screen.blit(defaults[int(str(math.floor(score))[i])],
+                            (getmiddle_nums_score(i, len(str(math.floor(score)))), 500))
+        if getRank(accuracy) == 'SS':
+            screen.blit(rankSS, (getmiddle_img(rankSS), 200))
+        elif getRank(accuracy) == 'S':
+            screen.blit(rankS, (getmiddle_img(rankS), 200))
+        elif getRank(accuracy) == 'A':
+            screen.blit(rankA, (getmiddle_img(rankA), 200))
+        elif getRank(accuracy) == 'B':
+            screen.blit(rankB, (getmiddle_img(rankB), 200))
+        elif getRank(accuracy) == 'C':
+            screen.blit(rankC, (getmiddle_img(rankC), 200))
+        elif getRank(accuracy) == 'D':
+            screen.blit(rankD, (getmiddle_img(rankD), 200))
+        print('결과창일때')
+        print('점수:', math.floor(score))
+        print('정확도:', accuracy)
+        print('랭크:', getRank(accuracy))
+    pg.display.update()
 
 pg.quit()
 sys.exit()
